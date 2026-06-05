@@ -28,9 +28,9 @@ jobs:
           import pytz
 
           # تعریف مسیرهای دقیق بر اساس ساختار پوشه‌بندی شما
-          CONFIG_SOURCE = "sinbox/configs.txt"
-          MASTER_FILE = "satle/master.txt"
-          USER_FILES = [f"mantle/user{i}.txt" for i in range(1, 7)] # از user1 تا user6
+          CONFIG_SOURCE = "utral/abortingpass/sinbox/configs.txt"
+          MASTER_FILE = "utral/abortingpass/satle/master.txt"
+          USER_FILES = [f"utral/abortingpass/mantle/user{i}.txt" for i in range(1, 7)] # از user1 تا user6
 
           def ensure_file_lines(lines, min_lines):
               if len(lines) < min_lines:
