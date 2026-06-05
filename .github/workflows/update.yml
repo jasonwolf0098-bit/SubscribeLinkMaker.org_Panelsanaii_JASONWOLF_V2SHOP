@@ -29,11 +29,18 @@ jobs:
           MASTER_FILE = "satle/master.txt"
           USER_FILES = [f"mantle/user{i}.txt" for i in range(1, 8)]
           
-          # نام مورد نظر شما برای نمایش در اپلیکیشن
           CUSTOM_NAME = "کانفیگ (ویژه نامحدود)"
 
           def log(msg):
               print(f">>> {msg}")
+
+          def update_line_after_hash(original_line, new_content):
+              # اگر علامت # در خط بود، متن قبل از آن را نگه می‌داریم
+              if "#" in original_line:
+                  prefix = original_line.split("#")[0]
+                  return f"{prefix}#{new_content}\n"
+              # اگر هشتگ نبود، کل خط را با محتوا جایگزین می‌کنیم (به عنوان زاپاس)
+              return f"{new_content}\n"
 
           try:
               if not os.path.exists(CONFIG_FILE):
@@ -47,22 +54,14 @@ jobs:
                   log("FAILED: configs.txt is empty!")
                   exit(1)
 
-              # انتخاب کانفیگ اول
+              # ۱. اصلاح نام کانفیگ اصلی (خط ۹)
               raw_config = configs[0]
-              
-              # --- بخش اصلاح نام کانفیگ ---
-              # اگر علامت # وجود داشت، متن بعد از آن را حذف می‌کنیم
-              if "#" in raw_config:
-                  base_config = raw_config.split("#")[0]
-              else:
-                  base_config = raw_config
-              
-              # اضافه کردن نام جدید بعد از #
-              final_config = f"{base_config}#{CUSTOM_NAME}"
-              log(f"Config Renamed to: {final_config}")
+              base_link = raw_config.split("#")[0] if "#" in raw_config else raw_config
+              final_config = f"{base_link}#{CUSTOM_NAME}"
 
-              # بروزرسانی Master
+              # ۲. بروزرسانی فایل Master
               if not os.path.exists(MASTER_FILE):
+                  log(f"Creating {MASTER_FILE}...")
                   os.makedirs("satle", exist_ok=True)
                   with open(MASTER_FILE, "w") as f: f.write("\n" * 60)
 
@@ -72,15 +71,23 @@ jobs:
               if len(m_lines) < 50:
                   m_lines.extend(["\n"] * (50 - len(m_lines)))
 
-              # قرار دادن کانفیگ اصلاح شده در خط ۹ (ایندکس ۸)
+              # اعمال تغییرات با حفظ ساختار قبل از #
+              # خط ۹ (ایندکس ۸): کل خط را با کانفیگ جدید عوض می‌کنیم (چون کلش لینک است)
               m_lines[8] = final_config + "\n"
-              m_lines[43] = f"Update: {datetime.utcnow().strftime('%H:%M:%S')} UTC\n"
-              m_lines[45] = f"Date: {datetime.utcnow().strftime('%Y-%m-%d')}\n"
+              
+              # خط ۴۴ (ایندکس ۴۳): فقط زمان بعد از #
+              current_time = datetime.utcnow().strftime('%H:%M:%S') + " UTC"
+              m_lines[43] = update_line_after_hash(m_lines[43], current_time)
+              
+              # خط ۴۶ (ایندکس ۴۵): فقط تاریخ بعد از #
+              current_date = datetime.utcnow().strftime('%Y-%m-%d')
+              m_lines[45] = update_line_after_hash(m_lines[45], current_date)
 
               with open(MASTER_FILE, "w", encoding="utf-8") as f:
                   f.writelines(m_lines)
+              log("Master updated with hash-preservation logic.")
 
-              # کپی به کاربران
+              # ۳. کپی به فایل‌های کاربران در پوشه mantle
               content_segment = m_lines[5:50]
               for u_path in USER_FILES:
                   if not os.path.exists(u_path):
@@ -98,8 +105,6 @@ jobs:
                       f.writelines(u_lines)
                   log(f"Updated: {u_path}")
 
-              log("Process finished successfully.")
-
           except Exception as e:
               log(f"CRITICAL ERROR: {str(e)}")
               exit(1)
@@ -107,8 +112,10 @@ jobs:
 
       - name: Commit Changes
         run: |
-          git config --global user.name "AutoUpdater-Bot"
+          git config --global user.name "AutoU
+
+pdater-Bot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Update Config Name & Sync: $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
+          git commit -m "Update with Hash-logic: $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
           git push
