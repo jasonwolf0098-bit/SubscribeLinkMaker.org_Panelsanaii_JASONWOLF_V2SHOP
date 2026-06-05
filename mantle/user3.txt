@@ -9,10 +9,10 @@ ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@ja
 vless://0b0f0f45-b79a-4647-b466-d7879cd4aeea@45.92.219.119:7443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=www.microsoft.com&fp=chrome&pbk=5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI&sid=d82fb387&type=tcp&headerType=none#کانفیگ (ویژه نامحدود)
 
 
-vless://931729a8-3c20-4841-89a1-f18dc9ce0a6f@77.74.123.169:8443?encryption=none&security=tls&sni=cdn3-87.vk-cdnvideo.com&fp=chrome&type=tcp&headerType=none#مخصوص مودم (مبینت ـ شاتل)
-vless://493da04d-dca2-4306-acaf-f3005ea69392@fbi.gov:80?encryption=none&security=none&alpn=h3%2Ch2%2Chttp%2F1.1&fp=chrome&type=ws&host=mtn.dgclix.ir&path=%2F%3FTELEGRAM--BYA--CHANEL---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN--%40JKVPN---%40JKVPN---%40JKVPN---%40JKVPN#مخصوص مودم (مبینت ـ های وب)
-vless://8f16ca1e-815f-4b2f-af24-8c49c27afe3c@165.215.250.12:443?encryption=none&security=tls&type=ws&host=faster.rainzone.ir&path=%2F25425%2Fsha#مخصوص مودم (مبینت ـ مخابرات - آسیاتک )
-vless://6682035b-8de0-4603-9e8a-b496857897b2@172.67.220.199:2095?encryption=none&security=none&type=ws&host=n5.asmdns.net&path=%2F#مخصوص مودم (مبینت - سایر شرکت ها)
+vless://394f6981-a782-4779-9a85-e6cf22935d93@152.233.35.228:8443?encryption=none&security=tls&sni=de1.fromblancwithlove.com&allowInsecure=1&type=tcp&headerType=none&host=%40ProxyVPN11#مخصوص مودم (مبینت ـ شاتل)
+vless://e5cc16a6-ea42-46b2-82ae-ad2157e1641b@chat.openai.com:443?encryption=none&security=tls&sni=hhlfy.twiladaphne.ndjp.net&alpn=h3%2Ch2%2Chttp%2F1.1&fp=chrome&type=ws&host=hhlfy.twiladaphne.ndjp.net&path=%2Ffp#مخصوص مودم (مبینت ـ های وب)
+vless://c83014e0-ad3e-4ebd-9e8f-8f7a1f6088d6@178.62.87.183:27774?encryption=none&security=none&type=tcp&headerType=none#مخصوص مودم (مبینت ـ مخابرات - آسیاتک )
+vless://dfc0cb9d-f005-41b0-848c-7703bd39d0de@31.76.113.51:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=it.s3-cloud.xyz&fp=chrome&pbk=zPi2L9vrl2hkaCTT3lZTzBna-qz6JrteRjDz1i-DsxY&sid=7a3f9e2b1c8d4f6a&type=tcp&headerType=none#مخصوص مودم (مبینت - سایر شرکت ها)
 
 
 
@@ -41,7 +41,7 @@ vless://9232a847-8f7d-4548-a23a-a8b3550e0f15@141.193.213.11:443?encryption=none&
 
 
 
-ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#08:39:09 UTC
+ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#12:35:39 UTC
 
 ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#2026-06-05
 
