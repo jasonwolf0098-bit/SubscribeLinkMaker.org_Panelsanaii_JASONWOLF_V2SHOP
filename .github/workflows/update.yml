@@ -1,8 +1,8 @@
 name: Auto Config Updater Pro
 on:
   schedule:
-    - cron: "0 * * * *" # هر ساعت یکبار
-  workflow_dispatch: # اجرای دستی برای تست
+    - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,17 +25,17 @@ jobs:
           import os
           from datetime import datetime
 
-          # --- تنظیم دقیق آدرس‌ها بر اساس اسکرین‌شات شما ---
           CONFIG_FILE = "sinbox/configs.txt"
           MASTER_FILE = "satle/master.txt"
-          # لیست کاربران از ۱ تا ۷
           USER_FILES = [f"mantle/user{i}.txt" for i in range(1, 8)]
+          
+          # نام مورد نظر شما برای نمایش در اپلیکیشن
+          CUSTOM_NAME = "کانفیگ (ویژه نامحدود)"
 
           def log(msg):
               print(f">>> {msg}")
 
           try:
-              # ۱. بررسی وجود فایل منبع کانفیگ
               if not os.path.exists(CONFIG_FILE):
                   log(f"FAILED: {CONFIG_FILE} not found!")
                   exit(1)
@@ -47,38 +47,43 @@ jobs:
                   log("FAILED: configs.txt is empty!")
                   exit(1)
 
-              # انتخاب اولین کانفیگ موجود (بعدا می‌توان Multi-node کرد)
-              new_link = configs[0]
-              log(f"Selected Config: {new_link[:40]}...")
+              # انتخاب کانفیگ اول
+              raw_config = configs[0]
+              
+              # --- بخش اصلاح نام کانفیگ ---
+              # اگر علامت # وجود داشت، متن بعد از آن را حذف می‌کنیم
+              if "#" in raw_config:
+                  base_config = raw_config.split("#")[0]
+              else:
+                  base_config = raw_config
+              
+              # اضافه کردن نام جدید بعد از #
+              final_config = f"{base_config}#{CUSTOM_NAME}"
+              log(f"Config Renamed to: {final_config}")
 
-              # ۲. بروزرسانی فایل Master در پوشه satle
+              # بروزرسانی Master
               if not os.path.exists(MASTER_FILE):
-                  log(f"Warning: {MASTER_FILE} missing, creating it...")
                   os.makedirs("satle", exist_ok=True)
                   with open(MASTER_FILE, "w") as f: f.write("\n" * 60)
 
               with open(MASTER_FILE, "r", encoding="utf-8") as f:
                   m_lines = f.readlines()
 
-              # اطمینان از طول فایل (حداقل ۵۰ خط)
               if len(m_lines) < 50:
                   m_lines.extend(["\n"] * (50 - len(m_lines)))
 
-              # اعمال تغییرات (خط ۹، ۴۴، ۴۶)
-              m_lines[8] = new_link + "\n"
+              # قرار دادن کانفیگ اصلاح شده در خط ۹ (ایندکس ۸)
+              m_lines[8] = final_config + "\n"
               m_lines[43] = f"Update: {datetime.utcnow().strftime('%H:%M:%S')} UTC\n"
               m_lines[45] = f"Date: {datetime.utcnow().strftime('%Y-%m-%d')}\n"
 
               with open(MASTER_FILE, "w", encoding="utf-8") as f:
                   f.writelines(m_lines)
-              log("Master file updated successfully.")
 
-              # ۳. انتقال قطعه خطوط ۶ تا ۵۰ به کاربران در پوشه mantle
+              # کپی به کاربران
               content_segment = m_lines[5:50]
-
               for u_path in USER_FILES:
                   if not os.path.exists(u_path):
-                      log(f"Creating missing user file: {u_path}")
                       os.makedirs("mantle", exist_ok=True)
                       with open(u_path, "w") as f: f.write("\n" * 60)
                   
@@ -88,14 +93,12 @@ jobs:
                   if len(u_lines) < 50:
                       u_lines.extend(["\n"] * (50 - len(u_lines)))
                   
-                  # جایگذاری بخش اصلی
                   u_lines[5:50] = content_segment
-                  
                   with open(u_path, "w", encoding="utf-8") as f:
                       f.writelines(u_lines)
                   log(f"Updated: {u_path}")
 
-              log("All tasks completed.")
+              log("Process finished successfully.")
 
           except Exception as e:
               log(f"CRITICAL ERROR: {str(e)}")
@@ -107,6 +110,5 @@ jobs:
           git config --global user.name "AutoUpdater-Bot"
           git config --global user.email "bot@github.com"
           git add .
-          # جلوگیری از خطا در صورتی که تغییری وجود نداشته باشد
-          git commit -m "Sync: $(date -u +'%Y-%m-%d %H:%M:%S') UTC" || echo "No changes to commit"
+          git commit -m "Update Config Name & Sync: $(date -u +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
           git push
