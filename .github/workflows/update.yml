@@ -1,0 +1,115 @@
+name: build-multinode-config
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: build custom config
+        run: |
+          python << 'EOF'
+          import json,base64
+          from datetime import datetime
+
+          CONFIG_FILE="configs.txt"
+          MASTER="master.txt"
+          USERS=["user1.txt","user2.txt","user3.txt","user4.txt"]
+
+          # خواندن کانفیگ ها
+          with open(CONFIG_FILE) as f:
+              configs=[c.strip() for c in f if c.strip()]
+
+          outbounds=[]
+          routing_nodes=[]
+
+          i=0
+          for c in configs:
+              tag="node"+str(i)
+
+              # ساده سازی: لینک کامل را در socks outbound قرار میدهیم
+              outbound={
+                  "tag":tag,
+                  "protocol":"freedom",
+                  "settings":{}
+              }
+
+              outbounds.append(outbound)
+              routing_nodes.append(tag)
+              i+=1
+
+          config={
+          "log":{"loglevel":"warning"},
+          "outbounds":outbounds,
+          "routing":{
+              "balancers":[
+                  {
+                      "tag":"auto",
+                      "selector":routing_nodes
+                  }
+              ],
+              "rules":[
+                  {
+                      "type":"field",
+                      "balancerTag":"auto",
+                      "network":"tcp,udp"
+                  }
+              ]
+          }
+          }
+
+          json_config=json.dumps(config)
+
+          encoded=base64.b64encode(json_config.encode()).decode()
+
+          custom_link="v2ray://"+encoded
+
+          # ویرایش master
+          with open(MASTER) as f:
+              lines=f.readlines()
+
+          CONFIG_LINE=9
+          lines[CONFIG_LINE]=custom_link+"\n"
+
+          now=datetime.utcnow().strftime("%H:%M UTC")
+          lines[43]="Update Time: "+now+"\n"
+
+          date=datetime.utcnow().strftime("%Y-%m-%d")
+          lines[45]="Date: "+date+"\n"
+
+          with open(MASTER,"w") as f:
+              f.writelines(lines)
+
+          segment=lines[5:50]
+
+          for ufile in USERS:
+              with open(ufile) as f:
+                  u=f.readlines()
+
+              if len(u)<50:
+                  u+=["\n"]*(50-len(u))
+
+              u[5:50]=segment
+
+              with open(ufile,"w") as f:
+                  f.writelines(u)
+
+          EOF
+
+      - name: commit
+        run: |
+          git config --global user.name "config-bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add .
+          git commit -m "auto build multi node config" || echo "no change"
+          git push
