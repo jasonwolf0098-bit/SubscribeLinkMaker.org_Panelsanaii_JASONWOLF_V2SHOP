@@ -1,115 +1,110 @@
-name: build-multinode-config
+name: Auto Config Updater
 
 on:
   schedule:
-    - cron: "0 * * * *"
-  workflow_dispatch:
+    - cron: "0 * * * *" # هر یک ساعت اجرا می‌شود
+  workflow_dispatch: # امکان اجرای دستی
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
-      - name: build custom config
+      - name: Run Update Script
         run: |
           python << 'EOF'
-          import json,base64
+          import os
           from datetime import datetime
+          import pytz
 
-          CONFIG_FILE="configs.txt"
-          MASTER="master.txt"
-          USERS=["user1.txt","user2.txt","user3.txt","user4.txt"]
+          # تعریف مسیرهای دقیق بر اساس ساختار پوشه‌بندی شما
+          CONFIG_SOURCE = "sinbox/configs.txt"
+          MASTER_FILE = "satle/master.txt"
+          USER_FILES = [f"mantle/user{i}.txt" for i in range(1, 7)] # از user1 تا user6
 
-          # خواندن کانفیگ ها
-          with open(CONFIG_FILE) as f:
-              configs=[c.strip() for c in f if c.strip()]
+          def ensure_file_lines(lines, min_lines):
+              if len(lines) < min_lines:
+                  lines.extend(["\n"] * (min_lines - len(lines)))
+              return lines
 
-          outbounds=[]
-          routing_nodes=[]
+          try:
+              # ۱. خواندن کانفیگ‌های جدید (خط اول را به عنوان نمونه برمی‌داریم)
+              if not os.path.exists(CONFIG_SOURCE):
+                  print(f"Error: {CONFIG_SOURCE} not found!")
+                  exit(1)
+              
+              with open(CONFIG_SOURCE, "r", encoding="utf-8") as f:
+                  configs = [line.strip() for line in f if line.strip()]
+              
+              if not configs:
+                  print("Error: configs.txt is empty!")
+                  exit(1)
+              
+              # انتخاب اولین کانفیگ (در آینده می‌توان منطق Multi-node را اینجا گذاشت)
+              new_config = configs[0]
 
-          i=0
-          for c in configs:
-              tag="node"+str(i)
+              # ۲. بروزرسانی فایل Master
+              if not os.path.exists(MASTER_FILE):
+                  print(f"Error: {MASTER_FILE} not found!")
+                  exit(1)
 
-              # ساده سازی: لینک کامل را در socks outbound قرار میدهیم
-              outbound={
-                  "tag":tag,
-                  "protocol":"freedom",
-                  "settings":{}
-              }
+              with open(MASTER_FILE, "r", encoding="utf-8") as f:
+                  master_lines = f.readlines()
 
-              outbounds.append(outbound)
-              routing_nodes.append(tag)
-              i+=1
+              # اطمینان از وجود حداقل ۴۶ خط
+              master_lines = ensure_file_lines(master_lines, 47)
 
-          config={
-          "log":{"loglevel":"warning"},
-          "outbounds":outbounds,
-          "routing":{
-              "balancers":[
-                  {
-                      "tag":"auto",
-                      "selector":routing_nodes
-                  }
-              ],
-              "rules":[
-                  {
-                      "type":"field",
-                      "balancerTag":"auto",
-                      "network":"tcp,udp"
-                  }
-              ]
-          }
-          }
+              # اعمال تغییرات در خطوط مشخص شده (ایندکس پایتون از 0 شروع می‌شود)
+              # خط ۹ (ایندکس ۸)، خط ۴۴ (ایندکس ۴۳)، خط ۴۶ (ایندکس ۴۵)
+              master_lines[8] = new_config + "\n"
+              
+              tehran_tz = pytz.timezone('Asia/Tehran')
+              now = datetime.now(tehran_tz)
+              master_lines[43] = f"Last Update: {now.strftime('%H:%M:%S')}\n"
+              master_lines[45] = f"Date: {now.strftime('%Y-%m-%d')}\n"
 
-          json_config=json.dumps(config)
+              with open(MASTER_FILE, "w", encoding="utf-8") as f:
+                  f.writelines(master_lines)
 
-          encoded=base64.b64encode(json_config.encode()).decode()
+              # ۳. کپی کردن قطعه (خط ۶ تا ۵۰) به فایل‌های کاربران
+              # ایندکس ۵ تا ۵۰ در پایتون
+              segment = master_lines[5:50]
 
-          custom_link="v2ray://"+encoded
+              for user_path in USER_FILES:
+                  if os.path.exists(user_path):
+                      with open(user_path, "r", encoding="utf-8") as f:
+                          u_lines = f.readlines()
+                      
+                      u_lines = ensure_file_lines(u_lines, 50)
+                      u_lines[5:50] = segment
+                      
+                      with open(user_path, "w", encoding="utf-8") as f:
+                          f.writelines(u_lines)
+                      print(f"Updated: {user_path}")
+                  else:
+                      print(f"Warning: {user_path} not found, skipping.")
 
-          # ویرایش master
-          with open(MASTER) as f:
-              lines=f.readlines()
+              print("All updates applied successfully.")
 
-          CONFIG_LINE=9
-          lines[CONFIG_LINE]=custom_link+"\n"
-
-          now=datetime.utcnow().strftime("%H:%M UTC")
-          lines[43]="Update Time: "+now+"\n"
-
-          date=datetime.utcnow().strftime("%Y-%m-%d")
-          lines[45]="Date: "+date+"\n"
-
-          with open(MASTER,"w") as f:
-              f.writelines(lines)
-
-          segment=lines[5:50]
-
-          for ufile in USERS:
-              with open(ufile) as f:
-                  u=f.readlines()
-
-              if len(u)<50:
-                  u+=["\n"]*(50-len(u))
-
-              u[5:50]=segment
-
-              with open(ufile,"w") as f:
-                  f.writelines(u)
-
+          except Exception as e:
+              print(f"An error occurred: {e}")
+              exit(1)
           EOF
 
-      - name: commit
+      - name: Commit and Push
         run: |
-          git config --global user.name "config-bot"
-          git config --global user.email "bot@users.noreply.github.com"
+          git config --global user.name "Github Action Bot"
+          git config --global user.email "actions@github.com"
           git add .
-          git commit -m "auto build multi node config" || echo "no change"
+          git commit -m "Automated update: $(date +'%Y-%m-%d %H:%M')" || echo "No changes to commit"
           git push
