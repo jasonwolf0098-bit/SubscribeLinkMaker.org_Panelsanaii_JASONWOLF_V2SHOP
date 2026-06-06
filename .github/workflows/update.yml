@@ -28,7 +28,7 @@ jobs:
 
           CONFIG_FILE = "sinbox/configs.txt"
           MASTER_FILE = "satle/master.txt"
-          USER_FILES = [f"mantle/user{i}.txt" for i in range(1,8) "benyaminRZK.txt"]
+          USER_FILES = [f"mantle/user{i}.txt" for i in range(1,8) "mantle/benyaminRZK.txt"]
 
           def replace_after_hash(line,new_text):
               if "#" in line:
