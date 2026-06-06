@@ -25,6 +25,7 @@ jobs:
           python << 'EOF'
           import os
           from datetime import datetime
+          from zoneinfo import ZoneInfo
 
           CONFIG_FILE="sinbox/configs.txt"
           MASTER_FILE="satle/master.txt"
@@ -89,10 +90,11 @@ jobs:
           master[23:27]=fixed[4:8]
           master[34:38]=fixed[8:12]
 
-          now=datetime.utcnow()
+          # ✅ زمان ایران
+          iran_time=datetime.now(ZoneInfo("Asia/Tehran"))
 
-          master[43]=update_after_hash(master[43],now.strftime("%H:%M:%S UTC"))
-          master[45]=update_after_hash(master[45],now.strftime("%Y-%m-%d"))
+          master[43]=update_after_hash(master[43],iran_time.strftime("%H:%M:%S IR"))
+          master[45]=update_after_hash(master[45],iran_time.strftime("%Y-%m-%d"))
 
           with open(MASTER_FILE,"w",encoding="utf-8") as f:
               f.writelines(master)
