@@ -41,9 +41,9 @@ vless://9232a847-8f7d-4548-a23a-a8b3550e0f15@141.193.213.11:443?encryption=none&
 
 
 
-ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#20:22:20 IR
+ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#00:17:29 IR
 
-ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#2026-06-06
+ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#2026-06-07
 
 
 
