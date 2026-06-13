@@ -9,10 +9,10 @@ ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@ja
 vless://0b0f0f45-b79a-4647-b466-d7879cd4aeea@45.92.219.119:7443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=www.microsoft.com&fp=chrome&pbk=5QAO98ot2U7TcGs_f6EEaQjCzNOJLNHqPf6smYsdFVI&sid=d82fb387&type=tcp&headerType=none#کانفیگ (ویژه نامحدود)
 
 
-vless://f2a73750-3087-48ff-a763-1348c15dce68@medium.com:443?encryption=none&security=tls&sni=rAyAn-007.mAxImA.DpDnS.OrG&fp=chrome&allowInsecure=1&type=ws&host=rAyAn-007.mAxImA.DpDnS.OrG&path=%2F%3Fed%3D2560#مخصوص مودم (مبینت ـ شاتل)
-vless://827466ba-0910-4c48-b156-2f37fdbda362@193.23.222.99:55152?encryption=none&flow=xtls-rprx-vision&security=reality&sni=cloudflare.com&pbk=fX2XkujtqhnkQDy-Lwgqm_OofDs1qO5ytvVNM6aV4C4&sid=ddcac8ed&type=tcp&headerType=none#مخصوص مودم (مبینت ـ های وب)
+vless://931729a8-3c20-4841-89a1-f18dc9ce0a6f@46.229.243.131:8443?encryption=none&security=tls&sni=cdn3-87.vk-cdnvideo.com&fp=chrome&allowInsecure=1&type=tcp&headerType=none#مخصوص مودم (مبینت ـ شاتل)
+vless://fc965ad9-bdd7-4815-ad71-b39ec5972dc1@188.114.97.6:443?encryption=none&security=tls&sni=octopusss4.com&fp=chrome&type=ws&host=octopusss4.com&path=%2Ftsghdws#مخصوص مودم (مبینت ـ های وب)
 vless://afcac633-0e1a-46c3-bef2-cc01cc0097c8@85.234.114.53:22231?encryption=none&flow=xtls-rprx-vision&security=tls&sni=r1.mizulina.top&fp=chrome&type=tcp&headerType=none#مخصوص مودم (مبینت ـ مخابرات - آسیاتک )
-ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTprMWRCT21PQjRvcWk3VW1wMzdhMWJR@82.38.31.186:8080#مخصوص مودم (مبینت - سایر شرکت ها)
+vless://931729a8-3c20-4841-89a1-f18dc9ce0a6f@46.229.243.139:8443?encryption=none&security=tls&sni=cdn3-87.vk-cdnvideo.com&fp=chrome&allowInsecure=1&type=tcp&headerType=none#مخصوص مودم (مبینت - سایر شرکت ها)
 
 
 
@@ -41,7 +41,7 @@ trojan://humanity@srv1.khatibirepair.ir:443?security=tls&sni=www.calmlunch.com&f
 
 
 
-ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#13:47:44 IR
+ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#15:08:39 IR
 
 ss://bm9uZTpBUmd2R1p5d0ErZ2FjZ0dWMjZCdm11MDUrd1ptUlcvaitBZFUrWjhCdDQ0PQ%3D%3D@jasonwolf_shop:85#2026-06-13
 
